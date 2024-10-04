@@ -99,6 +99,7 @@ public:
         while (first != nullptr) delFirst();
     }
     void add(Consumer * consumer) {
+        amountOfPeople_++;
         if (first == nullptr) {
             first = new node(consumer);
             last = first;
@@ -107,10 +108,10 @@ public:
             last->next = new node(consumer);
             last = last->next;
         }
-        amountOfPeople_++;
     }
     void remove(Consumer * consumer) {
         if (first == nullptr) return;
+        amountOfPeople_--;
         if (first->consumer_ == consumer) {
             delFirst();
             return;
@@ -125,7 +126,6 @@ public:
             }
             cur = cur->next;
         }
-        amountOfPeople_--;
     }
     std::vector <Consumer *> get_consumers () {
         std::vector <Consumer *> answer;
@@ -244,16 +244,42 @@ class intensiveGroupCouse : public NonIndividual {
 public:
     intensiveGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 5, 20, 5, Intencity::intensive) {}
 };
+class Individual : public Group {
+public:
+    Individual(Language language, Level level, Intencity intencity, Consumer * consumer): Group(language, level, get_cost_of_one(language)), consumer_(consumer), intencity_(intencity) {}
+    Consumer * get_consumer () {
+        return consumer_;
+    }
+    Intencity get_intencity () {
+        return intencity_;
+    }
+private:
+    Consumer * consumer_;
+    Intencity intencity_;
+};
 class Course {
 public:
     Course () {}
+    ~Course () {
+        for (auto u : groups_) {
+            delete u;
+        }
+        for (auto u : individuals_) {
+            delete u;
+        }
+    }
     void addPeople (std::vector <Consumer *> consumers, std::vector <Language> languages, std::vector <Level> levels, std::vector <Intencity> intencities) {
-        int groupSize = 2;
+        int groupSize = 10;
         std::map<std::pair<std::pair<Language, Level>, Intencity>, std::vector<Consumer *>> users;
         std::map<std::pair<std::pair<Language, Level>, Intencity>, std::vector<NonIndividual *>> group;
         for (int i = 0; i < consumers.size(); ++ i) {
            users[std::make_pair(std::make_pair(languages[i], levels[i]), intencities[i])].push_back(consumers[i]);
        }
+        for (auto u: individuals_) {
+            users[std::make_pair(std::make_pair(u->get_language(), u->get_level()), u->get_intencity())].push_back(u->get_consumer());
+            delete u;
+        }
+        individuals_.clear();
        for (auto u: groups_) {
            group[std::make_pair(std::make_pair(u->get_language(), u->get_level()), u->get_intencity())].push_back(u);
        }
@@ -280,10 +306,13 @@ public:
                 switch(f.second) {
                     case Intencity::usual:
                         addGroup(new usualGroupCouse(f.first.first, f.first.second));
+                        break;
                     case Intencity::supportive:
                         addGroup(new supportiveGroupCouse(f.first.first, f.first.second));
+                        break;
                     case Intencity::intensive:
                         addGroup(new intensiveGroupCouse(f.first.first, f.first.second));
+                        break;
                 }
                 int ssize = s.size();
                 for (int j = ssize - 1; j >= ssize - groupSize; j--) {
@@ -291,9 +320,31 @@ public:
                     s.pop_back();
                 }
             }
+            while(s.size() > 0) {
+                individuals_.push_back(new Individual(f.first.first, f.first.second, f.second, s[s.size() - 1]));
+                s.pop_back();
+            }
+            
             
             
         }
+    }
+    void recount () {
+        std::vector <NonIndividual *> toRemove;
+        for (auto u: groups_) {
+            u->recount();
+            if (u->get_amount() == 0) {
+                toRemove.push_back(u);
+            }
+        }
+        for (auto u: toRemove) {
+            deleteGroup(u);
+            delete u;
+        }
+    }
+    std::vector <NonIndividual *> get_non_individual () {
+        std::vector <NonIndividual *> answer = groups_;
+        return answer;
     }
     void print() {
         for (auto u: groups_) {
@@ -302,6 +353,7 @@ public:
     }
 private:
     std::vector <NonIndividual *> groups_;
+    std::vector <Individual *> individuals_;
     int amountOfGroups = 0;
     void addGroup (NonIndividual * group) {
         groups_.push_back(group);
@@ -333,25 +385,25 @@ int main() {
     std::vector <Intencity> intencities;
     consumers.push_back(a);
     consumers.push_back(b);
-    //consumers.push_back(c);
+    consumers.push_back(c);
     //consumers.push_back(d);
     consumers.push_back(e);
     consumers.push_back(f);
     languages.push_back(Language::English);
     languages.push_back(Language::English);
-    //languages.push_back(Language::English);
+    languages.push_back(Language::English);
     //languages.push_back(Language::English);
     languages.push_back(Language::Spanish);
     languages.push_back(Language::Spanish);
     levels.push_back(Level::Begin);
     levels.push_back(Level::Begin);
-    //levels.push_back(Level::Begin);
+    levels.push_back(Level::Begin);
     //levels.push_back(Level::Begin);
     levels.push_back(Level::Begin);
     levels.push_back(Level::Begin);
     intencities.push_back(Intencity::usual);
     intencities.push_back(Intencity::usual);
-    //intencities.push_back(Intencity::usual);
+    intencities.push_back(Intencity::usual);
     //intencities.push_back(Intencity::usual);
     intencities.push_back(Intencity::usual);
     intencities.push_back(Intencity::usual);
@@ -362,70 +414,22 @@ int main() {
     languages.clear();
     levels.clear();
     intencities.clear();
-    consumers.push_back(c);
-    consumers.push_back(d);
-    languages.push_back(Language::English);
-    languages.push_back(Language::English);
-    levels.push_back(Level::Begin);
-    levels.push_back(Level::Begin);
-    intencities.push_back(Intencity::usual);
-    intencities.push_back(Intencity::usual);
+    //consumers.push_back(c);
+    //consumers.push_back(d);
+    //languages.push_back(Language::English);
+    //languages.push_back(Language::English);
+    //levels.push_back(Level::Begin);
+    //levels.push_back(Level::Begin);
+    //intencities.push_back(Intencity::usual);
+    //intencities.push_back(Intencity::usual);
+    a->pay(1000000);
+    a->visit();
+    b->pay(100000);
+    b->visit();
+    course.recount();
+    course.print();
     course.addPeople(consumers, languages, levels, intencities);
     course.print();
     return 0;
 }
 
-
-
-/*
- Some crazy algorithm
- 
- 
- for (int i = 0; i < consumers.size(); ++ i) {
-    users[std::make_pair(std::make_pair(languages[i], levels[i]), intencities[i])].push_back(consumers[i]);
-}
-for (auto u: groups_) {
-    group[std::make_pair(std::make_pair(u->get_language(), u->get_level()), u->get_intencity())].push_back(u);
-}
-for (auto it : users) {
-    std::pair<std::pair<Language, Level>, Intencity> f = it.first;
-    std::vector<Consumer *> s = it.second;
-    std::vector<NonIndividual *> p = group[f];
-    for (int i = 5; i <= 7; ++i) {
-        if (s.size() == 0) break;
-        for (auto u: p) {
-            if (s.size() == 0) break;
-            while (u->get_amount() < i && s.size() > 0) {
-                u->add(s[s.size() - 1]);
-                s.pop_back();
-            }
-        }
-    }
-    if (s.size() == 0) {
-        for (auto u: p) {
-            if (u->get_amount() < 5) {
-                for (auto it : u->get_consumers()) {
-                    s.push_back(it);
-                }
-                deleteGroup(u);
-                delete u;
-            }
-        }
-    }
-    for (int i = 0; i <= s.size() / 7; ++i) {
-        switch(f.second) {
-            case Intencity::usual:
-                addGroup(new usualGroupCouse(f.first.first, f.first.second));
-            case Intencity::supportive:
-                addGroup(new supportiveGroupCouse(f.first.first, f.first.second));
-            case Intencity::intensive:
-                addGroup(new intensiveGroupCouse(f.first.first, f.first.second));
-        }
-        int ssize = s.size();
-        for (int j = s.size() - 1; j >= s.size() - 7; j--) {
-            groups_[amountOfGroups - 1]->add(s[j]);
-            s.pop_back();
-        }
-    }
-    
-}*/
