@@ -1,8 +1,8 @@
-#include "Modeling.h"
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <QApplication>
+#include "Application.h"
 
-int main() {
-
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    Window window(nullptr);
+    window.show();
+    return QApplication::exec();
 }
