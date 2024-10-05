@@ -1,6 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <QApplication>
+
+
 enum class Language {
     English,
     French,
@@ -432,4 +437,3 @@ int main() {
     course.print();
     return 0;
 }
-
