@@ -14,16 +14,19 @@ enum class Language {
     Chinese,
     Spanish
 };
+
 enum class Level {
-    Begin,
+    Beg,
     Mid,
     Pro
 };
-enum class Intencity {
+
+enum class Intensity {
     usual,
     supportive,
     intensive
 };
+
 int get_cost_of_one(Language language) {
     switch(language) {
         case Language::English:
@@ -40,6 +43,7 @@ int get_cost_of_one(Language language) {
             return 700;
     }
 }
+
 class Group {
 public:
     Group(Language language, Level level, int cost): language_(language), level_(level), cost_(cost) {}
@@ -99,7 +103,7 @@ private:
 
 class NonIndividual : public Group {
 public:
-    NonIndividual(Language language, Level level, int cost, int length, int lessonsPerWeek, Intencity intencity) : Group(language, level, cost), length_(length), lessonsPerWeek_(lessonsPerWeek), intencity_(intencity) {}
+    NonIndividual(Language language, Level level, int cost, int length, int lessonsPerWeek, Intensity intencity) : Group(language, level, cost), length_(length), lessonsPerWeek_(lessonsPerWeek), intencity_(intencity) {}
     ~NonIndividual() {
         while (first != nullptr) delFirst();
     }
@@ -165,7 +169,7 @@ public:
         if (curLength_ >= length_) {
             curLength_ = 0;
             switch(get_level()) {
-                case Level::Begin:
+                case Level::Beg:
                     set_level(Level::Mid);
                     break;
                 case Level::Mid:
@@ -183,7 +187,7 @@ public:
     void addDays(int days) {
         curLength_ += days;
     }
-    Intencity get_intencity () {
+    Intensity get_intencity () {
         return intencity_;
     }
     int get_amount () {
@@ -200,7 +204,7 @@ private:
     int length_ = 0;
     int curLength_ = 0;
     int lessonsPerWeek_ = 0;
-    Intencity intencity_;
+    Intensity intencity_;
     struct node {
         Consumer * consumer_;
         node * next = nullptr;
@@ -239,28 +243,28 @@ private:
 };
 class usualGroupCouse : public NonIndividual {
 public:
-    usualGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 2, 100, 2, Intencity::usual) {}
+    usualGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 2, 100, 2, Intensity::usual) {}
 };
 class supportiveGroupCouse : public NonIndividual {
 public:
-    supportiveGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 1, 200, 1, Intencity::supportive) {}
+    supportiveGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 1, 200, 1, Intensity::supportive) {}
 };
 class intensiveGroupCouse : public NonIndividual {
 public:
-    intensiveGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 5, 20, 5, Intencity::intensive) {}
+    intensiveGroupCouse(Language language, Level level) : NonIndividual(language, level, get_cost_of_one(language) * 2 * 5, 20, 5, Intensity::intensive) {}
 };
 class Individual : public Group {
 public:
-    Individual(Language language, Level level, Intencity intencity, Consumer * consumer): Group(language, level, get_cost_of_one(language)), consumer_(consumer), intencity_(intencity) {}
+    Individual(Language language, Level level, Intensity intencity, Consumer * consumer): Group(language, level, get_cost_of_one(language)), consumer_(consumer), intencity_(intencity) {}
     Consumer * get_consumer () {
         return consumer_;
     }
-    Intencity get_intencity () {
+    Intensity get_intencity () {
         return intencity_;
     }
 private:
     Consumer * consumer_;
-    Intencity intencity_;
+    Intensity intencity_;
 };
 class Course {
 public:
@@ -273,10 +277,10 @@ public:
             delete u;
         }
     }
-    void addPeople (std::vector <Consumer *> consumers, std::vector <Language> languages, std::vector <Level> levels, std::vector <Intencity> intencities) {
+    void addPeople (std::vector <Consumer *> consumers, std::vector <Language> languages, std::vector <Level> levels, std::vector <Intensity> intencities) {
         int groupSize = 10;
-        std::map<std::pair<std::pair<Language, Level>, Intencity>, std::vector<Consumer *>> users;
-        std::map<std::pair<std::pair<Language, Level>, Intencity>, std::vector<NonIndividual *>> group;
+        std::map<std::pair<std::pair<Language, Level>, Intensity>, std::vector<Consumer *>> users;
+        std::map<std::pair<std::pair<Language, Level>, Intensity>, std::vector<NonIndividual *>> group;
         for (int i = 0; i < consumers.size(); ++ i) {
            users[std::make_pair(std::make_pair(languages[i], levels[i]), intencities[i])].push_back(consumers[i]);
        }
@@ -289,7 +293,7 @@ public:
            group[std::make_pair(std::make_pair(u->get_language(), u->get_level()), u->get_intencity())].push_back(u);
        }
         for (auto it : users) {
-            std::pair<std::pair<Language, Level>, Intencity> f = it.first;
+            std::pair<std::pair<Language, Level>, Intensity> f = it.first;
             std::vector<Consumer *> s = it.second;
             std::vector<NonIndividual *> p = group[f];
             for (NonIndividual * Group : p) {
@@ -309,13 +313,13 @@ public:
             int fsize = s.size();
             for (int i = 0; i < fsize / groupSize; ++i) {
                 switch(f.second) {
-                    case Intencity::usual:
+                    case Intensity::usual:
                         addGroup(new usualGroupCouse(f.first.first, f.first.second));
                         break;
-                    case Intencity::supportive:
+                    case Intensity::supportive:
                         addGroup(new supportiveGroupCouse(f.first.first, f.first.second));
                         break;
-                    case Intencity::intensive:
+                    case Intensity::intensive:
                         addGroup(new intensiveGroupCouse(f.first.first, f.first.second));
                         break;
                 }
@@ -387,7 +391,7 @@ int main() {
     std::vector <Consumer *> consumers;
     std::vector <Language> languages;
     std::vector <Level> levels;
-    std::vector <Intencity> intencities;
+    std::vector <Intensity> intencities;
     consumers.push_back(a);
     consumers.push_back(b);
     consumers.push_back(c);
@@ -400,18 +404,18 @@ int main() {
     //languages.push_back(Language::English);
     languages.push_back(Language::Spanish);
     languages.push_back(Language::Spanish);
-    levels.push_back(Level::Begin);
-    levels.push_back(Level::Begin);
-    levels.push_back(Level::Begin);
+    levels.push_back(Level::Beg);
+    levels.push_back(Level::Beg);
+    levels.push_back(Level::Beg);
     //levels.push_back(Level::Begin);
-    levels.push_back(Level::Begin);
-    levels.push_back(Level::Begin);
-    intencities.push_back(Intencity::usual);
-    intencities.push_back(Intencity::usual);
-    intencities.push_back(Intencity::usual);
+    levels.push_back(Level::Beg);
+    levels.push_back(Level::Beg);
+    intencities.push_back(Intensity::usual);
+    intencities.push_back(Intensity::usual);
+    intencities.push_back(Intensity::usual);
     //intencities.push_back(Intencity::usual);
-    intencities.push_back(Intencity::usual);
-    intencities.push_back(Intencity::usual);
+    intencities.push_back(Intensity::usual);
+    intencities.push_back(Intensity::usual);
     Course course;
     course.addPeople(consumers, languages, levels, intencities);
     course.print();
