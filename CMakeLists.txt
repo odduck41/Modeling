@@ -4,7 +4,9 @@ project(Modeling)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_PREFIX_PATH "C:/Qt/6.6.1/mingw_64/lib/cmake")
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp
+        Modeling.h
+        Modeling.cpp)
 
 if (WIN32)
     message(STATUS "OS is Windows")
