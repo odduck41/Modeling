@@ -7,4 +7,5 @@ class Canvas : public QSFMLCanvas {
   protected:
     void onInit() override;
     void onUpdate() override;
+
 };

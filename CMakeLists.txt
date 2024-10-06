@@ -15,7 +15,9 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/QSFMLCanvas.cpp
         include/QSFMLCanvas.h
         src/Canvas.cpp
-        include/Canvas.h)
+        include/Canvas.h
+        include/Drawable.h
+        src/Drawable.cpp)
 
 if (WIN32)
     message(STATUS "OS is Windows")
