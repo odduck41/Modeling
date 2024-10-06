@@ -7,11 +7,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(${PROJECT_NAME} main.cpp
-        Modeling.h
-        Modeling.cpp
-        Application.cpp
-        Application.h)
+add_executable(${PROJECT_NAME} src/main.cpp
+        include/Modeling.h
+        src/Modeling.cpp
+        src/Application.cpp
+        include/Application.h
+        src/QSFMLCanvas.cpp
+        include/QSFMLCanvas.h
+        src/Canvas.cpp
+        include/Canvas.h)
 
 if (WIN32)
     message(STATUS "OS is Windows")

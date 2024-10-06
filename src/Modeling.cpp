@@ -1,4 +1,4 @@
-#include "Modeling.h"
+#include "../include/Modeling.h"
 
 long long Md::get_cost(const Md::Language& language) {
     switch (language) {
