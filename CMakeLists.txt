@@ -3,9 +3,18 @@ project(Modeling)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(${PROJECT_NAME} main.cpp
-        Modeling.h
-        Modeling.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp
+        include/Modeling.h
+        src/Modeling.cpp
+        include/Application.h
+        src/Application.cpp
+        include/Canvas.h
+        src/Canvas.cpp
+        include/Drawable.h
+        src/Drawable.cpp
+        include/QSFMLCanvas.h
+        src/QSFMLCanvas.cpp
+)
 
 if (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.6.1/mingw_64/lib/cmake")
