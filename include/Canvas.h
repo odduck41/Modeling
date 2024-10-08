@@ -22,7 +22,6 @@ class Canvas : public QSFMLCanvas {
     void onInit() override;
     void onUpdate() override;
   private:
-    sf::Student s{};
     std::map<std::string, sf::Shape*> objects;
     Mouse m_{};
 };

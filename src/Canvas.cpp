@@ -1,4 +1,5 @@
 #include "../include/Canvas.h"
+#include "../include/Drawable.h"
 #include <ranges>
 
 sf::Vector2f operator* (const sf::Vector2f& a, float b) {
@@ -10,14 +11,7 @@ Canvas::Canvas(QWidget* p, int fr) : QSFMLCanvas(p, fr) {
 }
 
 void Canvas::onInit() {
-    auto* a = new sf::CircleShape(50);
-    a->setPosition(250, 250);
-    a->setFillColor(sf::Color::Black);
-    objects["e"] = a;
-    a = new sf::CircleShape(500);
-    a->setPosition(1000, 1000);
-    a->setFillColor(sf::Color::Green);
-    objects["f"] = a;
+    ;
 }
 
 void Canvas::onUpdate() {
@@ -27,7 +21,7 @@ void Canvas::onUpdate() {
     } else {
         m_.reset();
     }
-    
+
     for (auto& i : objects | std::views::values) {
         draw(*i);
     }

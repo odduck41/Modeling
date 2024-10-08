@@ -124,6 +124,7 @@ void Window::main_window() {
     next->setText("Next stage");
     next->setGeometry({40, 80, 120, 40});
 
+
     showAll();
 }
 
