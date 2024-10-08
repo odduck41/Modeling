@@ -21,7 +21,7 @@ class Student : public QWidget, public sf::CircleShape {
     void move();
     void press(sf::RenderWindow&);
   signals:
-        void pressed();
+    void pressed();
   public slots:
         void updatePos(const sf::Vector2f&);
   private:

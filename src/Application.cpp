@@ -70,10 +70,12 @@ void Window::data_window() {
 }
 
 void Window::delete_data_window() {
+    hideAll();
     for (auto& i : objects | std::views::values) {
-        i->hide();
         delete i;
+        i = nullptr;
     }
+    objects.clear();
 }
 
 void Window::fetch_data() {
@@ -110,7 +112,28 @@ void Window::fetch_data() {
     main_window();
 }
 
-
 void Window::main_window() {
     this->setFixedSize({800, 800});
+
+    auto* canvas = new Canvas(this);
+    objects["Canvas"] = canvas;
+
+    auto* next = new QPushButton(this);
+    objects["next"] = next;
+    next->setText("Next stage");
+    next->setGeometry({40, 80, 120, 40});
+
+    showAll();
+}
+
+void Window::showAll() {
+    for (auto& i : objects | std::views::values) {
+        i->show();
+    }
+}
+
+void Window::hideAll() {
+    for (auto& i : objects | std::views::values) {
+        i->hide();
+    }
 }

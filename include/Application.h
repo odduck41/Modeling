@@ -14,6 +14,8 @@ class Window : public QMainWindow {
     explicit Window(QWidget*);
     void data_window();
   private:
+    void showAll();
+    void hideAll();
     void delete_data_window();
     void main_window();
     void statistics_window();
