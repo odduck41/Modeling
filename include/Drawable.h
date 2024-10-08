@@ -25,10 +25,12 @@ class Student : public QWidget, public sf::CircleShape {
   public slots:
         void updatePos(const sf::Vector2f&);
   private:
+    float radius(const sf::Vector2f&);
     bool inside(sf::RenderWindow&);
     Md::Consumer* me_{};
     std::optional<sf::Vector2f> purpose_{};
     std::optional<sf::Vector2f> velocity_{};
+    std::optional<sf::Vector2f> begin_{};
     Timer t_{};
 };
 
