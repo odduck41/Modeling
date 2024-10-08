@@ -7,6 +7,7 @@
 
 Window::Window(QWidget* w)
         : QMainWindow(w) {
+    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
     data_window();
 
 }
