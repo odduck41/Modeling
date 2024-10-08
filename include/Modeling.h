@@ -3,6 +3,9 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <random>
+#include <chrono>
+#include <thread>
 
 namespace Md {
 
@@ -140,4 +143,11 @@ class Course {
     void addGroup(NonIndividual* group);
     void deleteGroup(NonIndividual* group);
 };
+
+Language sLanguage (int i);
+Level sLevel (int i);
+Intensity sIntencity (int i);
+void Modeling ();
+
+
 }
