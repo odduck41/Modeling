@@ -3,6 +3,7 @@
 #include "Modeling.h"
 #include <SFML/Graphics.hpp>
 #include <QWidget>
+#include "Utility.h"
 
 namespace sf {
 
@@ -24,6 +25,7 @@ class Student : public QWidget, public sf::CircleShape {
   private:
     Md::Consumer* me_{};
     std::optional<sf::Vector2f> purpose_{};
+    Timer t_{};
 };
 
 }

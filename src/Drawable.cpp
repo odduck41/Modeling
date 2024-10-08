@@ -1,7 +1,10 @@
 #include "../include/Drawable.h"
 
 sf::Student::Student(Md::Consumer& me)
-        : QWidget(nullptr), sf::CircleShape(10), me_(&me) { }
+        : QWidget(nullptr), sf::CircleShape(10), me_(&me) {
+    t_.updateDifference(50ms);
+
+}
 
 void sf::Student::updatePos(const sf::Vector2f& pos) {
     purpose_ = pos;
