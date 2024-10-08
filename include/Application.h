@@ -12,6 +12,9 @@ class Window : public QMainWindow {
 
   public:
     explicit Window(QWidget*);
+    void data_window();
+    void main_window();
+    void statistics_window();
   private:
     std::map<std::string, QWidget*> objects;
 };
