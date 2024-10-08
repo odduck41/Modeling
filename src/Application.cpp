@@ -1,9 +1,9 @@
 #include "../include/Application.h"
-#include "../include/Modeling.h"
 #include "../include/Canvas.h"
 #include <QSpinBox>
 #include <QLabel>
 #include <QCheckBox>
+#include <ranges>
 
 Window::Window(QWidget* w)
         : QMainWindow(w) {
@@ -65,5 +65,52 @@ void Window::data_window() {
     auto* btn = new QPushButton("next", this);
     objects["next"] = btn;
     btn->setGeometry({140, 260, 80, 30});
+
+    auto _ = connect(btn, &QPushButton::pressed, this, &Window::fetch_data);
 }
 
+void Window::delete_data_window() {
+    for (auto& i : objects | std::views::values) {
+        i->hide();
+        delete i;
+    }
+}
+
+void Window::fetch_data() {
+    modeller_.setPeriod(dynamic_cast<QSpinBox*>(objects["month_spinbox"])->value());
+    if (dynamic_cast<QCheckBox*>(objects["EnCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::English);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["FrCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::French);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["GmCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::German);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["JaCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::Japanese);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["ChCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::Chinese);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["SpCb"])->isChecked()) {
+        modeller_.addLang(Md::Language::Chinese);
+    }
+
+    if (modeller_.getLangs().empty()) {
+        return;
+    }
+
+    delete_data_window();
+    main_window();
+}
+
+
+void Window::main_window() {
+    this->setFixedSize({800, 800});
+}

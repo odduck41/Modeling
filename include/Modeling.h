@@ -144,10 +144,20 @@ class Course {
     void deleteGroup(NonIndividual* group);
 };
 
-Language sLanguage (int i);
-Level sLevel (int i);
-Intensity sIntencity (int i);
-void Modeling ();
-
+//Language sLanguage (int i);
+//Level sLevel (int i);
+//Intensity sIntencity (int i);
+//void Modeling ();
+class Modeling {
+  public:
+    Modeling() = default;
+    void next() {};
+    void addLang(const Language&);
+    void setPeriod(const int&);
+    [[nodiscard]] const std::vector<Language>& getLangs() const;
+  private:
+    std::vector<Language> languages_{};
+    int month_{};
+};
 
 }

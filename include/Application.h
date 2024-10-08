@@ -13,8 +13,11 @@ class Window : public QMainWindow {
   public:
     explicit Window(QWidget*);
     void data_window();
+  private:
+    void delete_data_window();
     void main_window();
     void statistics_window();
-  private:
+    void fetch_data();
     std::map<std::string, QWidget*> objects;
+    Md::Modeling modeller_{};
 };
