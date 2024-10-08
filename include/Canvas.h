@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QSFMLCanvas.h"
+#include "Drawable.h"
 
 class Canvas : public QSFMLCanvas {
     Q_OBJECT
@@ -10,5 +11,5 @@ class Canvas : public QSFMLCanvas {
     void onInit() override;
     void onUpdate() override;
   private:
-
+    sf::Student s{};
 };

@@ -1,6 +1,8 @@
 #pragma once
 #include <chrono>
 
+using namespace std::literals::chrono_literals;
+
 class Timer {
   public:
     Timer() = default;

@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/Drawable.cpp
         include/Utility.h)
 
+
 if (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.6.1/mingw_64/lib/cmake")
     message(STATUS "OS is Windows")
