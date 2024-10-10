@@ -7,17 +7,19 @@
 
 namespace sf {
 
-//class Course : public QWidget, public sf::RectangleShape {
-//  public:
-//    Course();
-//
-//};
+class CourseD : public QWidget, public sf::RectangleShape {
+  public:
+    CourseD() = default;
+    explicit CourseD(Md::Course&);
+  private:
+    Md::Course* course_{};
+};
 
 class Student : public QWidget, public sf::CircleShape {
     Q_OBJECT
   public:
     Student() = default;
-    Student(Md::Consumer&);
+    explicit Student(Md::Consumer&);
     void move();
     void press(sf::RenderWindow&);
   signals:

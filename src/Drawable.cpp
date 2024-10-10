@@ -43,3 +43,5 @@ bool sf::Student::inside(sf::RenderWindow& w) {
 float sf::Student::radius(const sf::Vector2f& from) {
     return from.x * from.x + from.y * from.y;
 }
+
+sf::CourseD::CourseD(Md::Course& c) : course_(&c) {}

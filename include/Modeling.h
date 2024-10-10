@@ -157,6 +157,8 @@ class Modeling {
     [[nodiscard]] const std::vector<Language>& getLangs() const;
   private:
     std::vector<Language> languages_{};
+    std::vector<Course*> consumers_{};
+    void generate();
     int month_{};
 };
 
