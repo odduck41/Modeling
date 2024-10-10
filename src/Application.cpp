@@ -14,7 +14,7 @@ Window::Window(QWidget* w)
 
 void Window::data_window() {
     this->setFixedSize({250, 300});
-
+    this->setFocus();
     auto* label = new QLabel(this);
     objects["month_label"] = label;
     label->setText("Input the month amount");
