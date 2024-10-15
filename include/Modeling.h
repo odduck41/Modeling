@@ -213,6 +213,7 @@ class Modeling {
     void step(int range);
 
 };
+
 class Modeller {
   public:
     Modeller() = default;

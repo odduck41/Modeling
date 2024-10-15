@@ -11,7 +11,11 @@ Canvas::Canvas(QWidget* p, int fr) : QSFMLCanvas(p, fr) {
 }
 
 void Canvas::onInit() {
-    ;
+    objects["Course"] = new sf::CourseD(new Md::Course(Md::Language::English));
+    long long index = 0;
+    for (auto& i: dynamic_cast<sf::CourseD*>(objects["Course"])->getGroups()) {
+        objects["Group" + std::to_string(index++)] = i;
+    }
 }
 
 void Canvas::onUpdate() {

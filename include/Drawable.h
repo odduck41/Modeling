@@ -7,19 +7,28 @@
 
 namespace sf {
 
+class GroupD;
+
 class CourseD : public QWidget, public sf::RectangleShape {
   public:
     CourseD() = default;
-    explicit CourseD(Md::Course&);
+    explicit CourseD(Md::Course*);
+    std::vector<GroupD*> getGroups() const;
   private:
     Md::Course* course_{};
+    std::vector<GroupD*> groups;
+};
+
+class GroupD : public sf::RectangleShape {
+  public:
+    GroupD();
 };
 
 class Student : public QWidget, public sf::CircleShape {
     Q_OBJECT
   public:
     Student() = default;
-    explicit Student(Md::Consumer&);
+    explicit Student(Md::Consumer*);
     void move();
     void press(sf::RenderWindow&);
   signals:

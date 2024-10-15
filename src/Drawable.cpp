@@ -1,7 +1,7 @@
 #include "../include/Drawable.h"
 
-sf::Student::Student(Md::Consumer& me)
-        : QWidget(nullptr), sf::CircleShape(10), me_(&me) {}
+sf::Student::Student(Md::Consumer* me)
+        : QWidget(nullptr), sf::CircleShape(10), me_(me) {}
 
 void sf::Student::updatePos(const sf::Vector2f& pos) {
     purpose_ = pos;
@@ -44,6 +44,37 @@ float sf::Student::radius(const sf::Vector2f& from) {
     return from.x * from.x + from.y * from.y;
 }
 
-sf::CourseD::CourseD(Md::Course& c) : course_(&c) {
+sf::CourseD::CourseD(Md::Course* c) : course_(c) {
+    this->setFillColor(sf::Color::Transparent);
+    this->setOutlineThickness(5.);
+    this->setOutlineColor(sf::Color::Black);
+    this->setPosition(0, 0);
+    this->setSize({720, 540});
 
+    groups.resize(9);
+    for (auto& i : groups) {
+        i = new GroupD;
+    }
+
+    sf::Vector2f pos = this->getPosition();
+    for (auto& group : groups) {
+        group->setPosition(pos);
+        if (pos.y < 360) {
+            pos.y += 180;
+        } else {
+            pos.y = 0;
+            pos.x += 180;
+        }
+    }
+}
+
+std::vector<sf::GroupD*> sf::CourseD::getGroups() const {
+    return groups;
+}
+
+sf::GroupD::GroupD() {
+    this->setFillColor(sf::Color::Transparent);
+    this->setOutlineThickness(5.);
+    this->setOutlineColor(sf::Color::Black);
+    this->setSize({180, 180});
 }
