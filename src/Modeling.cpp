@@ -83,8 +83,7 @@ void Md::NonIndividual::add(Md::Consumer* consumer) {
         first = new node(consumer);
         last = first;
         return;
-    }
-    else {
+    } else {
         last->next = new node(consumer);
         last = last->next;
     }
@@ -127,8 +126,7 @@ bool Md::NonIndividual::recount() {
     while (cur != nullptr) {
         if (cur->next != nullptr) {
             if (checkNext(cur)) cur = cur->next;
-        }
-        else {
+        } else {
             cur = cur->next;
         }
     }
@@ -338,90 +336,54 @@ Md::usualGroupCourse::usualGroupCourse(Md::Language language, Md::Level level)
 Md::NonIndividual::node::node(Md::Consumer* consumer)
         : consumer_(consumer) { }
 
-//Md::Language Md::sLanguage (int i) {
-//    if (i == 0) {
-//        return Md::Language::English;
-//    } else if (i == 1) {
-//        return Md::Language::French;
-//    } else if (i == 2) {
-//        return Md::Language::German;
-//    } else if (i == 3) {
-//        return Md::Language::Japanese;
-//    } else if (i == 4) {
-//        return Md::Language::Chinese;
-//    } else {
-//        return Md::Language::Spanish;
-//    }
-//}
-//
-//Md::Level Md::sLevel (int i) {
-//    if (i == 0) {
-//        return Md::Level::Beg;
-//    } else if (i == 1) {
-//        return Md::Level::Mid;
-//    } else {
-//        return Md::Level::Pro;
-//    }
-//}
-//Md::Intensity Md::sIntencity (int i) {
-//    if (i == 0) {
-//        return Md::Intensity::usual;
-//    } else if (i == 1) {
-//        return Md::Intensity::supportive;
-//    } else {
-//        return Md::Intensity::intensive;
-//    }
-//}
-
-//void Md::Modeling () {
-//    std::srand(static_cast<unsigned int>(std::time(0)));
-//    Course * course = new Course();
-//    std::vector <std::string> ConsumerSurnames = {
-//            "Smith", "Johnson", "Williams", "Brown", "Jones",
-//            "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
-//            "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson",
-//            "Thomas", "Taylor", "Moore", "Jackson", "Martin",
-//            "Lee", "Perez", "Thompson", "White", "Harris",
-//            "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
-//            "Walker", "Young", "Allen", "King", "Wright",
-//            "Scott", "Torres", "Nguyen", "Hill", "Flores",
-//            "Green", "Adams", "Nelson", "Baker", "Hall",
-//            "Rivera", "Campbell", "Mitchell", "Carter", "Roberts",
-//            "Gomez", "Phillips", "Evans", "Turner", "Diaz"};
-//    while(true) {
-//        for (auto u: course->get_non_individual()) {
-//            for (auto it : u->get_consumers()) {
-//                int i = rand () % 6;
-//                if (i) it->pay(800);
-//                int j = rand () % 15;
-//                if (j) it->visit();
-//            }
-//            u->addDays(14);
-//        }
-//        course->recount();
-//        int amount = rand () % 15;
-//        std::vector <Consumer *> consumers(amount);
-//        std::vector <Language> languages(amount);
-//        std::vector <Level> levels(amount);
-//        std::vector <Intensity> intencities(amount);
-//        for (int i = 0; i < amount; ++i) {
-//            consumers[i] = new Consumer (ConsumerSurnames[rand() % 50]);
-//            languages[i] = sLanguage (rand() % 6);
-//            levels[i] = sLevel(rand() % 3);
-//            intencities[i] = sIntencity(rand() % 3);
-//        }
-//        course->addPeople(consumers, languages, levels, intencities);
-//        std::this_thread::sleep_for(std::chrono::seconds(30));
-//    }
-//}
-void Md::Modeling::addLang(const Md::Language& l) {
-    languages_.push_back(l);
+Md::Modeling::Modeling() {
+    course_ = new Course();
+    step(200);
 }
 
-void Md::Modeling::setPeriod(const int& m) {
-    month_ = m;
+Md::Modeling::~Modeling() {
+    delete course_;
 }
 
-const std::vector<Md::Language>& Md::Modeling::getLangs() const {
-    return languages_;
+void Md::Modeling::next() {
+    step(15);
+}
+
+std::vector<Md::NonIndividual*> Md::Modeling::getAllCourse() {
+    std::vector<NonIndividual*> ans;
+    for (auto u : course_->get_non_individual()) {
+        ans.push_back(u);
+    }
+    return ans;
+}
+
+void Md::Modeling::step(int range) {
+    static std::random_device dev; // added
+    static std::mt19937 generator(dev()); // added
+
+    for (auto u : course_->get_non_individual()) {
+        for (auto it : u->get_consumers()) {
+            long long i = generator() % 6; // fixed
+            if (i) it->pay(100000);
+            long long j = generator() % 15; // fixed
+            if (j) it->visit();
+        }
+        u->addDays(14);
+    }
+
+    course_->recount();
+    long long amount = generator() % range; // fixed
+    std::vector<Consumer*> consumers(amount);
+    std::vector<Language> languages(amount);
+    std::vector<Level> levels(amount);
+    std::vector<Intensity> intensities(amount);
+
+    for (int i = 0; i < amount; ++i) {
+        consumers[i] = new Consumer(ConsumerSurnames[generator() % 50]); // fixed
+        languages[i] = Language(generator() % 6); // fixed
+        levels[i] = Level(generator() % 3); // fixed
+        intensities[i] = Intensity(generator() % 3); // fixed
+    }
+
+    course_->addPeople(consumers, languages, levels, intensities);
 }
