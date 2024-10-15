@@ -95,7 +95,7 @@ class NonIndividual : public Group {
 
     [[nodiscard]] long long get_amount() const;
 
-    ~NonIndividual() override = default;
+    ~NonIndividual() override;
 
   protected:
     void check(Consumer*);
