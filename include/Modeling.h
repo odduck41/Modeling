@@ -49,7 +49,9 @@ class Group {
 
     void set_cost(int);
 
-    virtual ~Group() = 0;
+    virtual ~Group() {
+        ;
+    };
   private:
     Language language_;
     Level level_;
@@ -214,13 +216,16 @@ class Modeling {
 class Modeller {
   public:
     Modeller() = default;
-    void add(const Modeling&);
+    void setPeriod(int);
+    void add(const Language&);
     void next();
     std::vector<Consumer*> get_users();
     std::vector<Group*> get_groups();
     std::vector<Course*> get_courses();
+    ~Modeller();
   private:
-    std::vector<Modeling> modellers;
+    int period{};
+    std::vector<Modeling*> modellers;
 };
 }
 

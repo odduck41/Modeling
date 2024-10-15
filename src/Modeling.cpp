@@ -351,7 +351,7 @@ Md::NonIndividual::node::node(Md::Consumer* consumer)
 
 Md::Modeling::Modeling(const Language& lang) {
     course_ = new Course(lang);
-    step(200);
+//    step(200);
 }
 
 Md::Modeling::~Modeling() {
@@ -406,13 +406,13 @@ Md::Course* Md::Modeling::getCourse() {
     return course_;
 }
 
-void Md::Modeller::add(const Md::Modeling& md) {
-    modellers.push_back(md);
+void Md::Modeller::add(const Md::Language& l) {
+    modellers.push_back(new Modeling(l));
 }
 
 void Md::Modeller::next() {
     for (auto& modeller : modellers) {
-        modeller.next();
+        modeller->next();
     }
 }
 
@@ -443,8 +443,16 @@ std::vector<Md::Group*> Md::Modeller::get_groups() {
 std::vector<Md::Course*> Md::Modeller::get_courses() {
     std::vector<Md::Course*> ans;
     for (auto& i : modellers) {
-        ans.push_back(i.getCourse());
+        ans.push_back(i->getCourse());
     }
     return ans;
+}
+
+Md::Modeller::~Modeller() {
+    for (auto& m: modellers) delete m;
+}
+
+void Md::Modeller::setPeriod(int p) {
+    period = p;
 }
 

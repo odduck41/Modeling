@@ -80,37 +80,37 @@ void Window::delete_data_window() {
 }
 
 void Window::fetch_data() {
-    modeller_ = new Md::Modeling();
-//    modeller_->setPeriod(dynamic_cast<QSpinBox*>(objects["month_spinbox"])->value());
-//    if (dynamic_cast<QCheckBox*>(objects["EnCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::English);
-//    }
-//
-//    if (dynamic_cast<QCheckBox*>(objects["FrCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::French);
-//    }
-//
-//    if (dynamic_cast<QCheckBox*>(objects["GmCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::German);
-//    }
-//
-//    if (dynamic_cast<QCheckBox*>(objects["JaCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::Japanese);
-//    }
-//
-//    if (dynamic_cast<QCheckBox*>(objects["ChCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::Chinese);
-//    }
-//
-//    if (dynamic_cast<QCheckBox*>(objects["SpCb"])->isChecked()) {
-//        modeller_->addLang(Md::Language::Chinese);
-//    }
-//
-//    if (modeller_->getLangs().empty()) {
-//        delete modeller_;
-//        modeller_ = nullptr;
-//        return;
-//    }
+    modeller_ = new Md::Modeller;
+    modeller_->setPeriod(dynamic_cast<QSpinBox*>(objects["month_spinbox"])->value());
+    if (dynamic_cast<QCheckBox*>(objects["EnCb"])->isChecked()) {
+        modeller_->add(Md::Language::English);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["FrCb"])->isChecked()) {
+        modeller_->add(Md::Language::French);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["GmCb"])->isChecked()) {
+        modeller_->add(Md::Language::German);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["JaCb"])->isChecked()) {
+        modeller_->add(Md::Language::Japanese);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["ChCb"])->isChecked()) {
+        modeller_->add(Md::Language::Chinese);
+    }
+
+    if (dynamic_cast<QCheckBox*>(objects["SpCb"])->isChecked()) {
+        modeller_->add(Md::Language::Chinese);
+    }
+
+    if (modeller_->get_courses().empty()) {
+        delete modeller_;
+        modeller_ = nullptr;
+        return;
+    }
 
     delete_data_window();
     main_window();

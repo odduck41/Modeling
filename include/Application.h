@@ -21,5 +21,5 @@ class Window : public QMainWindow {
     void statistics_window();
     void fetch_data();
     std::map<std::string, QWidget*> objects;
-    Md::Modeling* modeller_{};
+    Md::Modeller* modeller_{};
 };
