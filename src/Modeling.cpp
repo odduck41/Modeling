@@ -225,13 +225,13 @@ Md::Course::~Course() {
     }
 }
 
-void Md::Course::addPeople(const std::vector<Consumer*>& consumers, const std::vector<Language>& languages,
+void Md::Course::addPeople(const std::vector<Consumer*>& consumers,
         const std::vector<Level>& levels, const std::vector<Intensity>& intensities) {
     int groupSize = 10;
     std::map<std::pair<std::pair<Language, Level>, Intensity>, std::vector<Consumer*>> users;
     std::map<std::pair<std::pair<Language, Level>, Intensity>, std::vector<NonIndividual*>> group;
     for (int i = 0; i < consumers.size(); ++i) {
-        users[std::make_pair(std::make_pair(languages[i], levels[i]), intensities[i])].push_back(consumers[i]);
+        users[std::make_pair(std::make_pair(lang_, levels[i]), intensities[i])].push_back(consumers[i]);
     }
     for (auto u : individuals_) {
         users[std::make_pair(std::make_pair(u->get_language(), u->get_level()), u->get_intensity())].push_back(
@@ -349,8 +349,8 @@ Md::usualGroupCourse::usualGroupCourse(Md::Language language, Md::Level level)
 Md::NonIndividual::node::node(Md::Consumer* consumer)
         : consumer_(consumer) { }
 
-Md::Modeling::Modeling() {
-    course_ = new Course();
+Md::Modeling::Modeling(const Language& lang) {
+    course_ = new Course(lang);
     step(200);
 }
 
@@ -398,7 +398,7 @@ void Md::Modeling::step(int range) {
         intensities[i] = Intensity(generator() % 3); // fixed
     }
 
-    course_->addPeople(consumers, languages, levels, intensities);
+    course_->addPeople(consumers, levels, intensities);
 
 }
 

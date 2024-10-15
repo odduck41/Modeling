@@ -157,9 +157,9 @@ class Individual : public Group {
 
 class Course {
   public:
-    Course() = default;
+    explicit Course(const Language& language) : lang_(language) {};
 
-    void addPeople(const std::vector<Consumer*>&, const std::vector<Language>&,
+    void addPeople(const std::vector<Consumer*>&,
             const std::vector<Level>&, const std::vector<Intensity>&);
 
     void recount();
@@ -171,6 +171,7 @@ class Course {
     ~Course();
 
   private:
+    Language lang_;
     std::vector<NonIndividual*> groups_;
     std::vector<Individual*> individuals_;
     int amountOfGroups{};
@@ -182,7 +183,7 @@ class Course {
 
 class Modeling {
   public:
-    Modeling();
+    explicit Modeling(const Language&);
 
     ~Modeling();
 
