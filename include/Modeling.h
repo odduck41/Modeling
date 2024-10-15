@@ -49,6 +49,7 @@ class Group {
 
     void set_cost(int);
 
+    virtual ~Group() = 0;
   private:
     Language language_;
     Level level_;
@@ -94,7 +95,7 @@ class NonIndividual : public Group {
 
     [[nodiscard]] long long get_amount() const;
 
-    ~NonIndividual();
+    ~NonIndividual() override = default;
 
   protected:
     void check(Consumer*);
@@ -147,6 +148,8 @@ class Individual : public Group {
 
     Intensity get_intensity();
 
+    ~Individual() override = default;
+
   private:
     Consumer* consumer_;
     Intensity intensity_;
@@ -162,6 +165,8 @@ class Course {
     void recount();
 
     std::vector<NonIndividual*> get_non_individual();
+
+    [[nodiscard]] std::vector<Group*> getGroups() const;
 
     ~Course();
 
@@ -183,6 +188,8 @@ class Modeling {
 
     void next();
 
+    Course* getCourse();
+
     std::vector<NonIndividual*> getAllCourse();
 
   private:
@@ -203,6 +210,16 @@ class Modeling {
     void step(int range);
 
 };
-
+class Modeller {
+  public:
+    Modeller() = default;
+    void add(const Modeling&);
+    void next();
+    std::vector<Consumer*> get_users();
+    std::vector<Group*> get_groups();
+    std::vector<Course*> get_courses();
+  private:
+    std::vector<Modeling> modellers;
+};
 }
 

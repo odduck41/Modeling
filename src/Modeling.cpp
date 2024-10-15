@@ -324,6 +324,19 @@ void Md::Course::deleteGroup(Md::NonIndividual* group) {
     }
 }
 
+std::vector<Md::Group*> Md::Course::getGroups() const {
+    std::vector<Md::Group*> ans;
+    for (auto& i: individuals_) {
+        ans.push_back(dynamic_cast<Md::Group*>(i));
+    }
+
+    for (auto& i: groups_) {
+        ans.push_back(dynamic_cast<Md::Group*>(i));
+    }
+
+    return ans;
+}
+
 Md::intensiveGroupCourse::intensiveGroupCourse(Md::Language language, Md::Level level)
         : NonIndividual(language, level, Md::get_cost(language) * 2 * 5, 20, 5, Intensity::intensive) { }
 
@@ -386,4 +399,52 @@ void Md::Modeling::step(int range) {
     }
 
     course_->addPeople(consumers, languages, levels, intensities);
+
 }
+
+Md::Course* Md::Modeling::getCourse() {
+    return course_;
+}
+
+void Md::Modeller::add(const Md::Modeling& md) {
+    modellers.push_back(md);
+}
+
+void Md::Modeller::next() {
+    for (auto& modeller : modellers) {
+        modeller.next();
+    }
+}
+
+std::vector<Md::Consumer*> Md::Modeller::get_users() {
+    auto groups = get_groups();
+    std::vector<Md::Consumer*> ans;
+    for (auto& i: groups) {
+        if (auto _ = dynamic_cast<Md::Individual*>(i); _ != nullptr) {
+            ans.push_back(_->get_consumer());
+        } else {
+            auto s = dynamic_cast<Md::NonIndividual*>(i);
+            ans.insert(ans.end(), s->get_consumers().begin(),  s->get_consumers().end());
+        }
+    }
+    return ans;
+}
+
+std::vector<Md::Group*> Md::Modeller::get_groups() {
+    auto courses = get_courses();
+    std::vector<Md::Group*> ans;
+    for (auto& i: courses) {
+        auto _ = i->getGroups();
+        ans.insert(ans.end(), _.begin(), _.end());
+    }
+    return ans;
+}
+
+std::vector<Md::Course*> Md::Modeller::get_courses() {
+    std::vector<Md::Course*> ans;
+    for (auto& i : modellers) {
+        ans.push_back(i.getCourse());
+    }
+    return ans;
+}
+
