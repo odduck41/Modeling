@@ -37,9 +37,9 @@ class Group {
   public:
     Group(Language, Level, long long);
 
-    Language get_language();
+    Language get_language() const;
 
-    Level get_level();
+    Level get_level() const;
 
     [[nodiscard]] long long get_cost() const;
 

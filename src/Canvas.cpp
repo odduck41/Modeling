@@ -6,20 +6,33 @@ sf::Vector2f operator* (const sf::Vector2f& a, float b) {
     return {a.x * b, a.y * b};
 }
 
-Canvas::Canvas(QWidget* p, int fr) : QSFMLCanvas(p, fr) {
+Canvas::Canvas(QWidget* p, Md::Modeller* md, int fr)
+: QSFMLCanvas(p, fr), md_(md) {
     this->setGeometry({200, 0, 600, 600});
 }
 
 void Canvas::onInit() {
-    objects["Course"] = new sf::CourseD(new Md::Course(Md::Language::English));
-    long long index = 0;
-    for (auto& i: dynamic_cast<sf::CourseD*>(objects["Course"])->getGroups()) {
-        objects["Group" + std::to_string(index++)] = i;
+    // objects["Course"] = new sf::CourseD(new Md::Course(Md::Language::English),
+    //     {10., 10.});
+    long long o = 0;
+    for (auto& i : md_->get_courses()) {
+        objects["Course" + std::to_string(o)] =  new sf::CourseD(new Md::Course(Md::Language::English),
+        {10.f + (720.f / 3 + 20) * (o / 3), 10.f + (540.f / 3 + 20) * (o % 3)});
+        long long index = 0;
+        for (const auto& group:
+            dynamic_cast<sf::CourseD*>(objects["Course" + std::to_string(o)])
+            ->getGroups()) {
+            auto e = group->getPosition();
+            objects["Group" + std::to_string(o) + std::to_string(index++)] = group;
+
+        }
+        ++o;
     }
+
 }
 
 void Canvas::onUpdate() {
-    clear(sf::Color::White);
+    clear(sf::Color::Black);
     if (this->QWidget::hasFocus()) {
         move();
     } else {

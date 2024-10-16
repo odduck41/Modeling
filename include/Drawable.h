@@ -12,7 +12,7 @@ class GroupD;
 class CourseD : public QWidget, public sf::RectangleShape {
   public:
     CourseD() = default;
-    explicit CourseD(Md::Course*);
+    explicit CourseD(Md::Course*, const sf::Vector2f&);
     std::vector<GroupD*> getGroups() const;
   private:
     Md::Course* course_{};
@@ -30,14 +30,14 @@ class Student : public QWidget, public sf::CircleShape {
     Student() = default;
     explicit Student(Md::Consumer*);
     void move();
-    void press(sf::RenderWindow&);
+    void press(const sf::RenderWindow&);
   signals:
     void pressed();
   public slots:
         void updatePos(const sf::Vector2f&);
   private:
     static float radius(const sf::Vector2f&);
-    bool inside(sf::RenderWindow&);
+    bool inside(const sf::RenderWindow&) const;
     Md::Consumer* me_{};
     std::optional<sf::Vector2f> purpose_{};
     std::optional<sf::Vector2f> velocity_{};

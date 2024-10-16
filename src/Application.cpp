@@ -119,7 +119,7 @@ void Window::fetch_data() {
 void Window::main_window() {
     this->setFixedSize({800, 800});
 
-    auto* canvas = new Canvas(this);
+    auto* canvas = new Canvas(this, modeller_);
     objects["Canvas"] = canvas;
 
     auto* next = new QPushButton(this);

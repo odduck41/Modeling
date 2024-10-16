@@ -16,12 +16,13 @@ class Mouse {
 class Canvas : public QSFMLCanvas {
     Q_OBJECT
   public:
-    Canvas(QWidget*, int = 1);
+    Canvas(QWidget*, Md::Modeller*, int = 1);
   protected:
     void move();
     void onInit() override;
     void onUpdate() override;
   private:
     std::map<std::string, sf::Shape*> objects;
+    Md::Modeller* md_{};
     Mouse m_{};
 };

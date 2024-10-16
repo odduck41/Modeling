@@ -1,5 +1,5 @@
 #include "../include/Modeling.h"
-
+// abc
 long long Md::get_cost(const Md::Language& language) {
     switch (language) {
         case Language::English:
@@ -17,11 +17,11 @@ long long Md::get_cost(const Md::Language& language) {
     }
 }
 
-Md::Language Md::Group::get_language() {
+Md::Language Md::Group::get_language() const {
     return language_;
 }
 
-Md::Level Md::Group::get_level() {
+Md::Level Md::Group::get_level() const {
     return level_;
 }
 
@@ -442,14 +442,14 @@ std::vector<Md::Group*> Md::Modeller::get_groups() {
 
 std::vector<Md::Course*> Md::Modeller::get_courses() {
     std::vector<Md::Course*> ans;
-    for (auto& i : modellers) {
+    for (const auto& i : modellers) {
         ans.push_back(i->getCourse());
     }
     return ans;
 }
 
 Md::Modeller::~Modeller() {
-    for (auto& m: modellers) delete m;
+    for (const auto& m: modellers) delete m;
 }
 
 void Md::Modeller::setPeriod(int p) {
